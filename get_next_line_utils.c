@@ -3,29 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
+/*   By: ebichan <ebichan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:24 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/08 19:45:41 by yebi             ###   ########.fr       */
+/*   Updated: 2025/02/13 17:04:13 by ebichan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-ssize_t	search_newline(char *str, ssize_t len)
+char	*ft_strchr(char *s, int c)
 {
-	ssize_t	i;
-
-	if (str == NULL)
-		return (0);
-	i = 0;
-	while (i < len)
+	while (*s)
 	{
-		if (str[i] == '\n')
-			return (1);
-		i++;
+		if (*s == (char)c)
+			return (s);
+		s++;
 	}
-	return (0);
+	if (c == '\0')
+		return ((char *)s);
+	return (NULL);
+}
+
+
+ssize_t	ft_strlen(char *s)
+{
+	ssize_t	len;
+
+	len = 0;
+	if(s == NULL)
+		return (0);
+	while (*s)
+	{
+		len++;
+		s++;
+	}
+	return (len);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*result;
+	size_t	s1_len;
+	size_t	s2_len;
+	char	*start;
+
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	result = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
+	if (result == NULL)
+		return (NULL);
+	start = result;
+	while (s1_len-- > 0)
+		*result++ = *s1++;
+	while (s2_len-- > 0)
+		*result++ = *s2++;
+	*result = '\0';
+	return (start);
 }
 
 void	ft_bzero(void *s, size_t n)
@@ -38,84 +72,4 @@ void	ft_bzero(void *s, size_t n)
 		*s_cpy = 0;
 		s_cpy++;
 	}
-}
-
-char	*ft_strcpy_for_gnl(char *src, ssize_t bytes_read)
-{
-	char	*dst;
-	ssize_t	len;
-	ssize_t	i;
-
-	if (src == NULL)
-		return (NULL);
-	len = 0;
-	while (len < bytes_read && src[len] && src[len] != '\n')
-		len++;
-	dst = (char *)malloc(sizeof(char) * (len + search_newline(src, bytes_read)
-				+ 1));
-	if (dst == NULL)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	if (i < bytes_read && src[i] == '\n')
-		dst[i++] = '\n';
-	dst[i] = '\0';
-	return (dst);
-}
-
-char	*prestr_cpy(char *src, char *buf, ssize_t trial_count,
-		ssize_t bytes_read)
-{
-	char	*dst;
-	ssize_t	len;
-	ssize_t	i;
-
-	if (src == NULL || buf == NULL)
-		return (NULL);
-	len = 0;
-	while (len < bytes_read && buf[len] != '\n')
-		len++;
-	dst = (char *)malloc(sizeof(char) * (ft_strlen(src) + len + 2));
-	if (dst == NULL)
-		return (NULL);
-	ft_bzero(dst, trial_count * BUFFER_SIZE + len + 1);
-	i = 0;
-	while (src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	free(src);
-	return (dst);
-}
-
-void	ft_strcat_for_gnl(char *dst, char *src)
-{
-	ssize_t	i;
-	ssize_t	dst_len;
-	ssize_t	src_len;
-
-	i = 0;
-	dst_len = 0;
-	src_len = 0;
-	while (dst[dst_len])
-		dst_len++;
-	while (src[src_len])
-		src_len++;
-	while (src[i] && src[i] != '\n')
-	{
-		dst[dst_len + i] = src[i];
-		i++;
-	}
-	if (search_newline(src, src_len))
-	{
-		dst[dst_len + i] = '\n';
-		i++;
-	}
-	dst[dst_len + i] = '\0';
-	return ;
 }
