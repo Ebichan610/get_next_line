@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:28 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/19 08:11:34 by yebi             ###   ########.fr       */
+/*   Updated: 2025/02/19 08:19:09 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ static char	*gnl_deal(int fd, char *result, char *buf)
 	{
 		ft_bzero(buf, BUFFER_SIZE + 1);
 		bytes_read = read(fd, buf, BUFFER_SIZE);
-		if (bytes_read <= 0)
+		if (bytes_read == 0)
+			return (result);
+		if (bytes_read < 0)
 			return (NULL);
 		tmp = result;
 		if (ft_strchr(buf, '\n'))
