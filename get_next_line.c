@@ -6,7 +6,7 @@
 /*   By: ebichan <ebichan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:28 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/13 17:39:09 by ebichan          ###   ########.fr       */
+/*   Updated: 2025/02/19 00:09:33 by ebichan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,14 @@ static char *newline_join(char *tmp, char *buf)
 	return (start);
 }
 
-static void	save_remaining_buffer(char *buf, ssize_t bytes_read)
+static char	*process_newline(char *result, char *buf)
+{
+	char *tmp = result;
+	result = newline_join(tmp, buf);
+	return (result);
+}
+
+static void	save_buffer(char *buf, ssize_t bytes_read)
 {
 	ssize_t	i;
 	ssize_t	j;
@@ -55,45 +62,47 @@ static void	save_remaining_buffer(char *buf, ssize_t bytes_read)
 		buf[j++] = '\0';
 }
 
+
+static char	*gnl_deal(int fd, char *result, char *buf)
+{
+	ssize_t bytes_read;
+	char *tmp;
+
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		ft_bzero(buf, BUFFER_SIZE + 1);
+		bytes_read = read(fd, buf, BUFFER_SIZE);
+		if (bytes_read <= 0)
+			return (bytes_read == 0 ? result : NULL);
+		tmp = result;
+		if (ft_strchr(buf, '\n'))
+    		result = process_newline(tmp, buf);
+		else
+    		result = ft_strjoin(tmp, buf);
+
+		if (!result)
+			return (NULL);
+		if (ft_strchr(buf, '\n'))
+			break ;
+	}
+	save_buffer(buf, bytes_read);
+	return (result);
+}
+
 char	*get_next_line(int fd)
 {
-	char		*result;
-	char		*tmp;
 	static char	buf[BUFFER_SIZE + 1];
-	ssize_t		bytes_read;
-
+	char		*result;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	result = NULL;
 	if (buf[0] != '\0')
 		result = ft_strjoin(NULL, buf);
-	bytes_read = 1;
-	while (bytes_read > 0)
-	{
-		ft_bzero(buf, BUFFER_SIZE + 1);
-		bytes_read = read(fd, buf, BUFFER_SIZE);
-		if (bytes_read == 0)
-			break;
-		if (bytes_read < 0)
-			return (NULL);
-		if(ft_strchr(buf,'\n') == NULL)
-		{
-			tmp = result;
-			result = ft_strjoin(tmp, buf);
-			if (result == NULL)
-				return (NULL);
-		}
-		else
-		{
-			tmp = result;
-			result = newline_join(tmp, buf);
-			break ;
-		}
-	}
-	save_remaining_buffer(buf, bytes_read);
-	return (result);
+	return (gnl_deal(fd, result, buf));
 }
+
 
 // #include <fcntl.h>
 // #include <stdio.h>
