@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebichan <ebichan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:24 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/13 17:04:13 by ebichan          ###   ########.fr       */
+/*   Updated: 2025/02/19 08:11:11 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,12 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-
 ssize_t	ft_strlen(char *s)
 {
 	ssize_t	len;
 
 	len = 0;
-	if(s == NULL)
+	if (s == NULL)
 		return (0);
 	while (*s)
 	{

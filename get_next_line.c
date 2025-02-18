@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ebichan <ebichan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:28 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/19 00:09:33 by ebichan          ###   ########.fr       */
+/*   Updated: 2025/02/19 08:11:34 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char *newline_join(char *tmp, char *buf)
+static char	*newline_join(char *tmp, char *buf)
 {
 	char	*result;
 	size_t	tmp_len;
@@ -35,7 +35,9 @@ static char *newline_join(char *tmp, char *buf)
 
 static char	*process_newline(char *result, char *buf)
 {
-	char *tmp = result;
+	char	*tmp;
+
+	tmp = result;
 	result = newline_join(tmp, buf);
 	return (result);
 }
@@ -47,10 +49,10 @@ static void	save_buffer(char *buf, ssize_t bytes_read)
 
 	i = 0;
 	j = 0;
-	if (bytes_read == 0) 
+	if (bytes_read == 0)
 	{
-    	buf[0] = '\0';
-    	return;
+		buf[0] = '\0';
+		return ;
 	}
 	while (i < bytes_read && buf[i] != '\n')
 		i++;
@@ -58,15 +60,14 @@ static void	save_buffer(char *buf, ssize_t bytes_read)
 		i++;
 	while (i < bytes_read)
 		buf[j++] = buf[i++];
-	while(j < bytes_read)
+	while (j < bytes_read)
 		buf[j++] = '\0';
 }
 
-
 static char	*gnl_deal(int fd, char *result, char *buf)
 {
-	ssize_t bytes_read;
-	char *tmp;
+	ssize_t	bytes_read;
+	char	*tmp;
 
 	bytes_read = 1;
 	while (bytes_read > 0)
@@ -74,13 +75,12 @@ static char	*gnl_deal(int fd, char *result, char *buf)
 		ft_bzero(buf, BUFFER_SIZE + 1);
 		bytes_read = read(fd, buf, BUFFER_SIZE);
 		if (bytes_read <= 0)
-			return (bytes_read == 0 ? result : NULL);
+			return (NULL);
 		tmp = result;
 		if (ft_strchr(buf, '\n'))
-    		result = process_newline(tmp, buf);
+			result = process_newline(tmp, buf);
 		else
-    		result = ft_strjoin(tmp, buf);
-
+			result = ft_strjoin(tmp, buf);
 		if (!result)
 			return (NULL);
 		if (ft_strchr(buf, '\n'))
@@ -102,7 +102,6 @@ char	*get_next_line(int fd)
 		result = ft_strjoin(NULL, buf);
 	return (gnl_deal(fd, result, buf));
 }
-
 
 // #include <fcntl.h>
 // #include <stdio.h>
