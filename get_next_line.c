@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:28 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/19 08:19:09 by yebi             ###   ########.fr       */
+/*   Updated: 2025/02/19 10:16:29 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,16 @@ static char	*gnl_deal(int fd, char *result, char *buf)
 	{
 		ft_bzero(buf, BUFFER_SIZE + 1);
 		bytes_read = read(fd, buf, BUFFER_SIZE);
-		if (bytes_read == 0)
+		if (bytes_read <= 0)
 			return (result);
-		if (bytes_read < 0)
-			return (NULL);
 		tmp = result;
 		if (ft_strchr(buf, '\n'))
 			result = process_newline(tmp, buf);
 		else
 			result = ft_strjoin(tmp, buf);
-		if (!result)
+		if (tmp != NULL)
+			free(tmp);
+		if (result == NULL)
 			return (NULL);
 		if (ft_strchr(buf, '\n'))
 			break ;
@@ -96,13 +96,16 @@ char	*get_next_line(int fd)
 {
 	static char	buf[BUFFER_SIZE + 1];
 	char		*result;
+	char		*tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	result = NULL;
 	if (buf[0] != '\0')
 		result = ft_strjoin(NULL, buf);
-	return (gnl_deal(fd, result, buf));
+	tmp = result;
+	result = gnl_deal(fd, tmp, buf);
+	return (result);
 }
 
 // #include <fcntl.h>
@@ -113,7 +116,7 @@ char	*get_next_line(int fd)
 // 	int		fd;
 // 	char	*line;
 
-// 	fd = open("7-onechar.txt", O_RDONLY);
+// 	fd = open("1-brouette.txt", O_RDONLY);
 // 	if (fd < 0)
 // 		return (1);
 // 	while ((line = get_next_line(fd)))
