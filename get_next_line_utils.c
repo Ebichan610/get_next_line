@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:24 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/19 08:11:11 by yebi             ###   ########.fr       */
+/*   Updated: 2025/02/19 15:47:57 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ ssize_t	ft_strlen(char *s)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*result;
-	size_t	s1_len;
-	size_t	s2_len;
+	ssize_t	s1_len;
+	ssize_t	s2_len;
 	char	*start;
 
 	s1_len = ft_strlen(s1);

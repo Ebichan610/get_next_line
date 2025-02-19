@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:28 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/19 10:16:29 by yebi             ###   ########.fr       */
+/*   Updated: 2025/02/19 15:48:21 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	save_buffer(char *buf, ssize_t bytes_read)
 		i++;
 	while (i < bytes_read)
 		buf[j++] = buf[i++];
-	while (j < bytes_read)
+	while (j < BUFFER_SIZE)
 		buf[j++] = '\0';
 }
 
@@ -102,7 +102,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	result = NULL;
 	if (buf[0] != '\0')
-		result = ft_strjoin(NULL, buf);
+		result = ft_strjoin("", buf);
 	tmp = result;
 	result = gnl_deal(fd, tmp, buf);
 	return (result);
@@ -116,7 +116,7 @@ char	*get_next_line(int fd)
 // 	int		fd;
 // 	char	*line;
 
-// 	fd = open("1-brouette.txt", O_RDONLY);
+// 	fd = open("multiple_nlx5", O_RDONLY);
 // 	if (fd < 0)
 // 		return (1);
 // 	while ((line = get_next_line(fd)))
