@@ -6,7 +6,7 @@
 /*   By: yebi <yebi@student.42tokyo.jp>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 20:24:28 by yebi              #+#    #+#             */
-/*   Updated: 2025/02/19 16:32:09 by yebi             ###   ########.fr       */
+/*   Updated: 2025/02/19 22:33:33 by yebi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,17 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	result = NULL;
-	if (buf[0] != '\0')
-		result = ft_strjoin("", buf);
-	tmp = result;
-	result = gnl_deal(fd, tmp, buf);
+	if (buf[0] != '\0' && ft_strchr(buf, '\n'))
+	{
+		result = newline_join("", buf);
+		save_buffer(buf, BUFFER_SIZE);
+	}
+	else
+	{
+		if (buf[0] != '\0')
+			result = ft_strjoin("", buf);
+		tmp = result;
+		result = gnl_deal(fd, tmp, buf);
+	}
 	return (result);
 }
